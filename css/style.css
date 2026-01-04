@@ -1,1 +1,16 @@
 
+:root {
+    --primary: #6C63FF;
+    --secondary: #FF6B6B;
+    --dark: #1a1a2e;
+    --card-bg: #0f3460;
+    --text: #ffffff;
+    --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* All styling for the app including:
+- Splash screen
+- Header and navigation
+- Caption cards
+- Admin panel styles
+- Responsive design */
