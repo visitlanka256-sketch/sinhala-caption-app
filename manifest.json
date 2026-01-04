@@ -1,1 +1,17 @@
-
+{
+    "name": "සිංහල කැප්ෂන්",
+    "short_name": "කැප්ෂන්",
+    "description": "Sinhala caption collection app",
+    "start_url": "./",
+    "display": "standalone",
+    "background_color": "#1a1a2e",
+    "theme_color": "#6C63FF",
+    "icons": [
+        {
+            "src": "icons/icon-72x72.png",
+            "sizes": "72x72",
+            "type": "image/png"
+        },
+        // Other icon sizes...
+    ]
+}
