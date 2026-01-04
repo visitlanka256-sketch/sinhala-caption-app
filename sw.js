@@ -1,14 +1,20 @@
-const CACHE_NAME = 'sinhala-caption-v1';
-const urlsToCache = [
-    './',
-    './index.html',
-    './admin.html',
-    './css/style.css',
-    './js/db.js',
-    './js/app.js',
-    './js/admin.js',
-    './icons/icon-192x192.png',
-    './icons/icon-512x512.png'
+const CACHE_NAME = "sinhala-caption-v1";
+const FILES_TO_CACHE = [
+  "./",
+  "./index.html",
+  "./css/style.css",
+  "./js/app.js",
+  "./manifest.json"
 ];
 
-// Service worker events for caching and offline support
+self.addEventListener("install", event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(FILES_TO_CACHE))
+  );
+});
+
+self.addEventListener("fetch", event => {
+  event.respondWith(
+    caches.match(event.request).then(response => response || fetch(event.request))
+  );
+});
