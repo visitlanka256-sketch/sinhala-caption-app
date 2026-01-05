@@ -1,9 +1,21 @@
-window.toggleTheme = ()=>{
-  const t=document.documentElement.getAttribute("data-theme");
-  const n=t==="light"?"dark":"light";
-  document.documentElement.setAttribute("data-theme",n);
-  localStorage.setItem("theme",n);
-};
+const toggleBtn = document.querySelector(".theme-toggle");
 
-const s=localStorage.getItem("theme");
-if(s) document.documentElement.setAttribute("data-theme",s);
+export function initTheme(){
+  const saved = localStorage.getItem("theme");
+  if(saved){
+    document.documentElement.setAttribute("data-theme", saved);
+  }
+}
+
+export function toggleTheme(){
+  const current = document.documentElement.getAttribute("data-theme");
+  const next = current === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  localStorage.setItem("theme", next);
+}
+
+if(toggleBtn){
+  toggleBtn.addEventListener("click", toggleTheme);
+}
+
+initTheme();
