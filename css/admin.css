@@ -1,0 +1,12 @@
+body{
+  background:#020617;
+  color:white;
+  font-family:system-ui;
+}
+
+.admin-card{
+  background:#0f3460;
+  padding:16px;
+  border-radius:14px;
+  margin:16px;
+}
