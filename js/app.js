@@ -1,29 +1,28 @@
-let currentCategory = 'all';
+import { db } from "./firebase.js";
+import { ref, onValue } from
+"https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
-// Splash screen handling
-window.addEventListener('load', () => { /* ... */ });
+const list = document.getElementById("captionList");
 
-// Sidebar and navigation
-function toggleSidebar() { /* ... */ }
+window.loadCategory = cat => {
+  onValue(ref(db,"captions/"+cat), snap => {
+    list.innerHTML="";
+    snap.forEach(c=>{
+      const d=document.createElement("div");
+      d.className="caption";
+      d.innerHTML=`
+        <p>${c.val().text}</p>
+        <button onclick="copyText('${c.val().text}')">Copy</button>
+        <button onclick="toggleFav('${c.key}')">⭐</button>
+      `;
+      list.appendChild(d);
+    });
+  });
+};
 
-// Caption loading and rendering
-function loadCaptions() { /* ... */ }
-function renderCaptions(captions) { /* ... */ }
-
-// Category management
-function showCategory(category) { /* ... */ }
-
-// Favorites management
-function showFavorites() { /* ... */ }
-function toggleFavorite(id, btn) { /* ... */ }
-
-// Copy and share functions
-function copyCaption(text) { /* ... */ }
-function shareCaption(text) { /* ... */ }
-
-// Modal handling
-function openModal(id) { /* ... */ }
-function closeModal() { /* ... */ }
-
-// Scroll to top
-function scrollToTop() { /* ... */ }
+window.copyText = t =>{
+  navigator.clipboard.writeText(t);
+  const toast=document.getElementById("toast");
+  toast.style.display="block";
+  setTimeout(()=>toast.style.display="none",1200);
+};
