@@ -1,16 +1,43 @@
-
-:root {
-    --primary: #6C63FF;
-    --secondary: #FF6B6B;
-    --dark: #1a1a2e;
-    --card-bg: #0f3460;
-    --text: #ffffff;
-    --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+:root{
+  --bg:#020617;
+  --card:#0f3460;
+  --text:#fff;
 }
 
-/* All styling for the app including:
-- Splash screen
-- Header and navigation
-- Caption cards
-- Admin panel styles
-- Responsive design */
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --card:#fff;
+  --text:#020617;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:system-ui;
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  padding:16px;
+}
+
+.caption{
+  background:var(--card);
+  padding:14px;
+  margin:12px;
+  border-radius:14px;
+}
+
+.toast{
+  position:fixed;
+  bottom:80px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#000;
+  color:#fff;
+  padding:10px 16px;
+  border-radius:999px;
+  display:none;
+}
