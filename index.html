@@ -1,297 +1,49 @@
 <!DOCTYPE html>
 <html lang="si">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - සිංහල කැප්ෂන්</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="manifest" href="manifest.json">
-    <!-- Favicon -->
-<link rel="icon" type="image/png" sizes="72x72" href="icons/icon-72x72.png">
-<link rel="icon" type="image/png" sizes="96x96" href="icons/icon-96x96.png">
-<link rel="icon" type="image/png" sizes="128x128" href="icons/icon-128x128.png">
-<link rel="icon" type="image/png" sizes="144x144" href="icons/icon-144x144.png">
-<link rel="icon" type="image/png" sizes="152x152" href="icons/icon-152x152.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png">
+  <meta charset="UTF-8">
+  <title>Sinhala Caption App</title>
 
-<!-- Apple Touch -->
-<link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#020617">
 
-<!-- PWA -->
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#4DB6E2">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="admin-body">
-    <!-- Login Screen -->
-    <div id="loginScreen" class="login-screen">
-        <div class="login-card">
-            <div class="login-header">
-                <div class="login-icon">🔐</div>
-                <h2>Admin Login</h2>
-                <p class="login-hint">Default: admin / admin123</p>
-            </div>
-            <form onsubmit="adminLogin(event)">
-                <div class="input-group">
-                    <i class="fas fa-user"></i>
-                    <input type="text" id="adminUser" placeholder="Username" required>
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" id="adminPass" placeholder="Password" required>
-                </div>
-                <button type="submit" class="login-btn">
-                    <i class="fas fa-sign-in-alt"></i> Login වන්න
-                </button>
-            </form>
-        </div>
-    </div>
 
-    <!-- Admin Dashboard -->
-    <div id="adminDashboard" class="admin-dashboard hidden">
-        <header class="admin-header">
-            <div class="admin-menu-btn" onclick="toggleAdminSidebar()">
-                <i class="fas fa-bars"></i>
-            </div>
-            <h1>Admin Panel</h1>
-            <button class="logout-btn" onclick="adminLogout()">
-                <i class="fas fa-sign-out-alt"></i>
-            </button>
-        </header>
+<body>
+<div class="app-container">
 
-        <!-- Admin Sidebar -->
-        <div id="adminSidebar" class="admin-sidebar">
-            <div class="admin-profile">
-                <div class="admin-avatar">👤</div>
-                <h3>Admin</h3>
-            </div>
-            <nav class="admin-nav">
-                <a href="#" class="admin-nav-item active" onclick="showSection('dashboard')">
-                    <i class="fas fa-tachometer-alt"></i> Dashboard
-                </a>
-                <a href="#" class="admin-nav-item" onclick="showSection('addCaption')">
-                    <i class="fas fa-plus-circle"></i> Add Caption
-                </a>
-                <a href="#" class="admin-nav-item" onclick="showSection('manageCaptions')">
-                    <i class="fas fa-list"></i> Manage Captions
-                </a>
-                <a href="#" class="admin-nav-item" onclick="showSection('categories')">
-                    <i class="fas fa-folder"></i> Categories
-                </a>
-                <a href="#" class="admin-nav-item" onclick="showSection('settings')">
-                    <i class="fas fa-cog"></i> Settings
-                </a>
-                <a href="index.html" class="admin-nav-item">
-                    <i class="fas fa-external-link-alt"></i> View App
-                </a>
-            </nav>
-        </div>
-        <div id="adminOverlay" class="overlay" onclick="toggleAdminSidebar()"></div>
+  <div class="header">
+    <h1>🇱🇰 Sinhala Captions</h1>
+    <button onclick="toggleTheme()">🌙</button>
+  </div>
 
-        <!-- Main Content -->
-        <main class="admin-main">
-            <!-- Dashboard Section -->
-            <section id="dashboardSection" class="admin-section">
-                <h2 class="section-title">📊 Dashboard</h2>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon">📝</div>
-                        <div class="stat-info">
-                            <h3 id="totalCaptions">0</h3>
-                            <p>Total Captions</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">⭐</div>
-                        <div class="stat-info">
-                            <h3 id="totalFavorites">0</h3>
-                            <p>Favorites</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">📁</div>
-                        <div class="stat-info">
-                            <h3 id="totalCategories">6</h3>
-                            <p>Categories</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">📅</div>
-                        <div class="stat-info">
-                            <h3 id="todayAdded">0</h3>
-                            <p>Added Today</p>
-                        </div>
-                    </div>
-                </div>
+  <input id="search" placeholder="Search captions..." />
 
-                <!-- Quick Add -->
-                <div class="quick-add-card">
-                    <h3>⚡ Quick Add Caption</h3>
-                    <textarea id="quickCaption" placeholder="කැප්ෂන් එක ලියන්න..."></textarea>
-                    <div class="quick-add-row">
-                        <select id="quickCategory">
-                            <option value="love">ආදරය 💕</option>
-                            <option value="sad">දුක 😢</option>
-                            <option value="friendship">මිත්‍රත්වය 👫</option>
-                            <option value="motivation">අභිප්‍රේරණය 🔥</option>
-                            <option value="funny">විහිළු 😂</option>
-                            <option value="attitude">ආකල්ප 👑</option>
-                        </select>
-                        <button onclick="quickAddCaption()" class="quick-add-btn">
-                            <i class="fas fa-plus"></i> Add
-                        </button>
-                    </div>
-                </div>
-            </section>
+  <div class="tabs">
+    <button onclick="loadCategory('love')">❤️ Love</button>
+    <button onclick="loadCategory('sad')">😢 Sad</button>
+    <button onclick="loadFavorites()">⭐ Favorites</button>
+  </div>
 
-            <!-- Add Caption Section -->
-            <section id="addCaptionSection" class="admin-section hidden">
-                <h2 class="section-title">➕ Add New Caption</h2>
-                <div class="form-card">
-                    <form onsubmit="addCaption(event)">
-                        <div class="form-group">
-                            <label>කැප්ෂන් එක</label>
-                            <textarea id="captionText" rows="4" placeholder="සිංහලෙන් කැප්ෂන් එක ලියන්න..." required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Category</label>
-                            <select id="captionCategory" required>
-                                <option value="">Category තෝරන්න</option>
-                                <option value="love">ආදරය 💕</option>
-                                <option value="sad">දුක 😢</option>
-                                <option value="friendship">මිත්‍රත්වය 👫</option>
-                                <option value="motivation">අභිප්‍රේරණය 🔥</option>
-                                <option value="funny">විහිළු 😂</option>
-                                <option value="attitude">ආකල්ප 👑</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Tags (comma වලින් වෙන් කරන්න)</label>
-                            <input type="text" id="captionTags" placeholder="love, romantic, feelings">
-                        </div>
-                        <button type="submit" class="submit-btn">
-                            <i class="fas fa-save"></i> Save Caption
-                        </button>
-                    </form>
-                </div>
+  <div id="captionList"></div>
+</div>
 
-                <!-- Bulk Add -->
-                <div class="form-card mt-20">
-                    <h3>📦 Bulk Add Captions</h3>
-                    <p class="hint">එක line එකකට එක caption එකක් දාන්න</p>
-                    <textarea id="bulkCaptions" rows="8" placeholder="Caption 1&#10;Caption 2&#10;Caption 3"></textarea>
-                    <div class="form-row">
-                        <select id="bulkCategory">
-                            <option value="love">ආදරය 💕</option>
-                            <option value="sad">දුක 😢</option>
-                            <option value="friendship">මිත්‍රත්වය 👫</option>
-                            <option value="motivation">අභිප්‍රේරණය 🔥</option>
-                            <option value="funny">විහිළු 😂</option>
-                            <option value="attitude">ආකල්ප 👑</option>
-                        </select>
-                        <button onclick="bulkAddCaptions()" class="submit-btn">
-                            <i class="fas fa-upload"></i> Bulk Add
-                        </button>
-                    </div>
-                </div>
-            </section>
+<div class="toast" id="toast">Copied!</div>
 
-            <!-- Manage Captions Section -->
-            <section id="manageCaptionsSection" class="admin-section hidden">
-                <h2 class="section-title">📋 Manage Captions</h2>
-                <div class="filter-bar">
-                    <select id="filterCategory" onchange="filterCaptions()">
-                        <option value="all">All Categories</option>
-                        <option value="love">ආදරය 💕</option>
-                        <option value="sad">දුක 😢</option>
-                        <option value="friendship">මිත්‍රත්වය 👫</option>
-                        <option value="motivation">අභිප්‍රේරණය 🔥</option>
-                        <option value="funny">විහිළු 😂</option>
-                        <option value="attitude">ආකල්ප 👑</option>
-                    </select>
-                    <input type="text" id="adminSearch" placeholder="Search..." oninput="filterCaptions()">
-                </div>
-                <div class="captions-list" id="adminCaptionsList">
-                    <!-- Captions will be loaded here -->
-                </div>
-            </section>
+<!-- AdMob (Safe) -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+ style="display:block"
+ data-ad-client="ca-pub-XXXX"
+ data-ad-slot="YYYY"
+ data-ad-format="auto"></ins>
+<script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
 
-            <!-- Categories Section -->
-            <section id="categoriesSection" class="admin-section hidden">
-                <h2 class="section-title">📁 Categories</h2>
-                <div class="categories-grid" id="categoriesGrid">
-                    <!-- Categories will be loaded here -->
-                </div>
-            </section>
-
-            <!-- Settings Section -->
-            <section id="settingsSection" class="admin-section hidden">
-                <h2 class="section-title">⚙️ Settings</h2>
-                <div class="settings-card">
-                    <h3>🔑 Change Password</h3>
-                    <div class="form-group">
-                        <input type="password" id="newPassword" placeholder="New Password">
-                    </div>
-                    <button onclick="changePassword()" class="submit-btn mt-20">Update Password</button>
-                </div>
-                <div class="settings-card mt-20">
-                    <h3>💾 Backup & Restore</h3>
-                    <div class="settings-buttons">
-                        <button onclick="exportData()" class="btn-export">
-                            <i class="fas fa-download"></i> Export Data
-                        </button>
-                        <input type="file" id="importFile" accept=".json" onchange="importData(event)" hidden>
-                        <button onclick="document.getElementById('importFile').click()" class="btn-import">
-                            <i class="fas fa-upload"></i> Import Data
-                        </button>
-                    </div>
-                </div>
-                <div class="settings-card mt-20">
-                    <h3>🗑️ Danger Zone</h3>
-                    <button onclick="clearAllData()" class="btn-danger">Clear All Data</button>
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <!-- Edit Modal -->
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeEditModal()">&times;</span>
-            <h3>✏️ Edit Caption</h3>
-            <textarea id="editCaptionText" rows="4"></textarea>
-            <select id="editCaptionCategory">
-                <option value="love">ආදරය 💕</option>
-                <option value="sad">දුක 😢</option>
-                <option value="friendship">මිත්‍රත්වය 👫</option>
-                <option value="motivation">අභිප්‍රේරණය 🔥</option>
-                <option value="funny">විහිළු 😂</option>
-                <option value="attitude">ආකල්ප 👑</option>
-            </select>
-            <input type="text" id="editCaptionTags" placeholder="Tags">
-            <input type="hidden" id="editCaptionId">
-            <button onclick="saveEditedCaption()" class="submit-btn mt-20">Save Changes</button>
-        </div>
-    </div>
-
-    <!-- Toast -->
-    <div id="adminToast" class="toast">
-        <i class="fas fa-check-circle"></i>
-        <span id="toastMessage">Success!</span>
-    </div>
-
-    <script src="js/db.js"></script>
-    <script src="js/admin.js"></script>
-    <script>
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js")
-    .then(() => console.log("Service Worker Registered"));
-}
-</script>
-
+<script src="js/theme.js"></script>
+<script src="js/firebase.js" type="module"></script>
+<script src="js/favorites.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>
