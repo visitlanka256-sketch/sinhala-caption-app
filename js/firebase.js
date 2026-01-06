@@ -4,13 +4,13 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth
 import { getDatabase } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-  projectId: "YOUR_PROJECT",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "XXXX",
-  appId: "XXXX"
+  apiKey: "AIzaSyAODNsLvrVieXeSVIj2Wd4o1jJO7n_sg6k",
+  authDomain: "sinhala-caption-app.firebaseapp.com",
+  databaseURL: "https://sinhala-caption-app-default-rtdb.firebaseio.com",
+  projectId: "sinhala-caption-app",
+  storageBucket: "sinhala-caption-app.firebasestorage.app",
+  messagingSenderId: "534197636566",
+  appId: "1:534197636566:web:aa8767b5b8e21eb3e66877"
 };
 
 export const app = initializeApp(firebaseConfig);
