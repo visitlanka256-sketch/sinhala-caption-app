@@ -1,20 +1,24 @@
-// js/firebase.js (GitHub Pages compatible)
-
+// Firebase core
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+
+// Firebase services
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 import { getDatabase } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
+/* 🔥 Firebase Configuration */
 const firebaseConfig = {
-    apiKey: "AIzaSyABWsasIo80hJhsIcnv-S3FZqjL3wWG_8w",
-  authDomain: "sinhala-caption-app-728f9.firebaseapp.com",
-  databaseURL: "https://sinhala-caption-app-728f9-default-rtdb.firebaseio.com",
-  projectId: "sinhala-caption-app-728f9",
-  storageBucket: "sinhala-caption-app-728f9.firebasestorage.app",
-  messagingSenderId: "278795939200",
-  appId: "1:278795939200:web:d3554344be4e8453f56565",
-  measurementId: "G-M8HHTLPV3M"
+  apiKey: "AIzaSyD_CBwtnOiU4zta9hQOAV_Pybxju0cYlEg",
+  authDomain: "sinhala-caption-app-e8ae2.firebaseapp.com",
+  databaseURL: "https://sinhala-caption-app-e8ae2-default-rtdb.firebaseio.com",
+  projectId: "sinhala-caption-app-e8ae2",
+  storageBucket: "sinhala-caption-app-e8ae2.firebasestorage.app",
+  messagingSenderId: "1078942154546",
+  appId: "1:1078942154546:web:050f46b43d777b8cdb212b"
 };
 
+/* ✅ Initialize Firebase */
 export const app = initializeApp(firebaseConfig);
+
+/* ✅ Firebase Services */
 export const auth = getAuth(app);
 export const db = getDatabase(app);
