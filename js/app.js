@@ -1,73 +1,33 @@
 import { db } from "./firebase.js";
-import { ref, onValue } from
-"https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+import {
+  ref,
+  onValue
+} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
-const list = document.getElementById("captionList");
+const list = document.getElementById("captions");
 const search = document.getElementById("search");
-let currentCategory = "all";
 
-let favorites = JSON.parse(localStorage.getItem("favs") || "[]");
+let all = [];
 
-/* 🔥 LOAD FROM FIREBASE */
 onValue(ref(db, "captions"), snap => {
-  const data = snap.val() || {};
-  render(Object.entries(data));
+  all = Object.values(snap.val() || {});
+  render(all);
 });
 
-function render(items){
+search.oninput = () => {
+  render(
+    all.filter(c =>
+      c.text.toLowerCase().includes(search.value.toLowerCase())
+    )
+  );
+};
+
+function render(data) {
   list.innerHTML = "";
-  items.forEach(([id, item])=>{
-    if(currentCategory !== "all" && item.category !== currentCategory) return;
-    if(search.value && !item.text.includes(search.value)) return;
-
-    list.innerHTML += `
-      <div class="caption-card">
-        <div class="caption-text">${item.text}</div>
-        <div class="caption-actions">
-          <button onclick="copyText('${item.text}')">📋</button>
-          <button onclick="toggleFav('${id}')"
-            class="fav ${favorites.includes(id) ? "active":""}">
-            ⭐
-          </button>
-        </div>
-      </div>`;
+  data.forEach(c => {
+    const div = document.createElement("div");
+    div.className = "card";
+    div.textContent = c.text;
+    list.appendChild(div);
   });
-}
-
-/* 🔎 SEARCH */
-search?.addEventListener("input", ()=>renderCache());
-
-/* 📂 CATEGORY */
-window.setCategory = cat => {
-  currentCategory = cat;
-  renderCache();
-};
-
-let cache = [];
-function renderCache(){
-  render(cache);
-}
-
-/* ⭐ FAVORITES */
-window.toggleFav = id => {
-  favorites.includes(id)
-    ? favorites = favorites.filter(x=>x!==id)
-    : favorites.push(id);
-
-  localStorage.setItem("favs", JSON.stringify(favorites));
-  renderCache();
-};
-
-/* 📋 COPY */
-window.copyText = text => {
-  navigator.clipboard.writeText(text);
-  showToast("Copied!");
-};
-
-/* 🔔 TOAST */
-const toast = document.getElementById("toast");
-function showToast(msg){
-  toast.textContent = msg;
-  toast.classList.add("show");
-  setTimeout(()=>toast.classList.remove("show"),1500);
 }
