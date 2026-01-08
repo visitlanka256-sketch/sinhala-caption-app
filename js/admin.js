@@ -109,3 +109,52 @@ document.getElementById("addBtn").onclick = () => {
 
   document.getElementById("captionText").value = "";
 };
+const captionsRef = ref(db, "captions");
+
+window.addCaption = () => {
+  const text = captionText.value.trim();
+  const category = captionCategory.value;
+
+  if (!text) return alert("❗ Caption empty");
+
+  push(captionsRef, {
+    text,
+    category,
+    time: Date.now()
+  });
+
+  captionText.value = "";
+};
+function loadCaptions() {
+  onValue(captionsRef, snap => {
+    captionList.innerHTML = "";
+
+    snap.forEach(child => {
+      const id = child.key;
+      const data = child.val();
+
+      captionList.innerHTML += `
+        <div class="cap-card">
+          <p contenteditable="true" 
+             onblur="editCaption('${id}', this.innerText)">
+            ${data.text}
+          </p>
+          <small>${data.category}</small>
+          <button onclick="deleteCaption('${id}')">🗑 Delete</button>
+        </div>
+      `;
+    });
+  });
+}
+
+window.deleteCaption = id => {
+  if (confirm("Delete this caption?")) {
+    remove(ref(db, "captions/" + id));
+  }
+};
+
+window.editCaption = (id, newText) => {
+  update(ref(db, "captions/" + id), {
+    text: newText
+  });
+};
