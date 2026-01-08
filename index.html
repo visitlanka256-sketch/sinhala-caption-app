@@ -2,57 +2,41 @@
 <html lang="si">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sinhala Caption App</title>
 
 <link rel="manifest" href="manifest.json">
-<link rel="icon" href="icons/icon-192x192.png">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="icons/icon-192x192.png">
 
 <script type="module" src="js/app.js"></script>
 <script src="js/theme.js"></script>
+<script src="js/image.js"></script>
 </head>
 
 <body>
-
-<header class="top-bar">
-  <h1>සිංහල කැප්ෂන්</h1>
-  <input type="search" id="searchBox" placeholder="Search captions...">
+<header>
+  <h1>💬 Sinhala Captions</h1>
+  <button onclick="toggleTheme()">🌙</button>
 </header>
 
-<!-- Category Tabs -->
-<div class="tabs">
-  <button onclick="filterCat('all')" class="active">All</button>
+<nav class="tabs">
+  <button onclick="filterCat('all')">All</button>
   <button onclick="filterCat('love')">Love</button>
   <button onclick="filterCat('sad')">Sad</button>
   <button onclick="filterCat('funny')">Funny</button>
-  <button onclick="filterCat('motivation')">Motivation</button>
-</div>
-
-<!-- Skeleton -->
-<div id="skeleton">
-  <div class="skeleton-card"></div>
-  <div class="skeleton-card"></div>
-</div>
-
-<!-- Captions -->
-<div id="captionList"></div>
-
-<!-- FAB (Admin only) -->
-<button id="fab" onclick="location.href='admin.html'">
-  <span class="material-icons">add</span>
-</button>
-
-<!-- Bottom Nav -->
-<nav class="bottom-nav">
-  <button onclick="goHome()"><span class="material-icons">home</span></button>
-  <button onclick="showFavorites()"><span class="material-icons">favorite</span></button>
-  <button onclick="showTrending()"><span class="material-icons">trending_up</span></button>
-  <button onclick="toggleTheme()"><span class="material-icons">dark_mode</span></button>
 </nav>
 
-<div id="toast">Copied!</div>
+<input id="search" placeholder="Search..." oninput="searchCaptions()">
 
+<div id="captionList" class="cards"></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("sw.js");
+}
+</script>
 </body>
 </html>
