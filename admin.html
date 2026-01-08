@@ -1,32 +1,128 @@
 <!DOCTYPE html>
-<html>
+<html lang="si">
 <head>
-  <title>Admin Panel</title>
-  <link rel="stylesheet" href="css/admin.css">
+  <meta charset="UTF-8">
+  <title>Admin Panel – Sinhala Caption App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <style>
+    body {
+      margin:0;
+      font-family: sans-serif;
+      background:#f4f6fb;
+    }
+    header {
+      background:#6C63FF;
+      color:#fff;
+      padding:16px;
+      text-align:center;
+      font-size:20px;
+      font-weight:bold;
+    }
+    .container {
+      padding:15px;
+      max-width:700px;
+      margin:auto;
+    }
+    textarea, select, input {
+      width:100%;
+      padding:12px;
+      border-radius:10px;
+      border:1px solid #ddd;
+      margin-bottom:12px;
+      font-size:16px;
+    }
+    button {
+      width:100%;
+      background:#6C63FF;
+      color:white;
+      border:none;
+      padding:14px;
+      border-radius:12px;
+      font-size:17px;
+      cursor:pointer;
+    }
+    button:hover { opacity:0.9; }
+
+    .card {
+      background:#fff;
+      padding:12px;
+      border-radius:14px;
+      box-shadow:0 4px 10px rgba(0,0,0,.08);
+      margin-bottom:12px;
+    }
+    .row {
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:8px;
+    }
+    .small-btn {
+      flex:1;
+      font-size:14px;
+      padding:8px;
+      background:#eee;
+      color:#333;
+    }
+    .danger { background:#ff4d4d;color:white; }
+  </style>
 </head>
+
 <body>
 
-<form id="loginForm">
-  <h2>Admin Login</h2>
-  <input id="email" type="email" placeholder="Email" required>
-  <input id="password" type="password" placeholder="Password" required>
-  <button>Login</button>
-</form>
+<header>🛠 Admin Dashboard</header>
 
-<div id="adminPanel" style="display:none;">
-  <button id="logoutBtn">Logout</button>
+<div class="container">
 
-  <h3>Add Caption</h3>
-  <textarea id="captionText"></textarea>
-  <select id="category">
-    <option>Love</option>
-    <option>Sad</option>
-    <option>Funny</option>
-  </select>
-  <button id="addBtn">Add</button>
+  <!-- LOGIN -->
+  <div id="loginBox" class="card">
+    <h3>🔐 Admin Login</h3>
+    <input id="email" placeholder="Email">
+    <input id="password" type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+  </div>
+
+  <!-- ADMIN PANEL -->
+  <div id="adminPanel" style="display:none">
+
+    <div class="card">
+      <h3>➕ Add Caption</h3>
+
+      <textarea id="captionText" placeholder="සිංහල caption එක මෙතන..."></textarea>
+
+      <select id="category">
+        <option value="love">Love</option>
+        <option value="sad">Sad</option>
+        <option value="motivation">Motivation</option>
+        <option value="funny">Funny</option>
+      </select>
+
+      <label>
+        <input type="checkbox" id="premiumOnly"> Premium Only
+      </label><br><br>
+
+      <label>
+        <input type="checkbox" id="dailyCaption"> Daily Notification Caption
+      </label><br><br>
+
+      <button onclick="addCaption()">Save Caption</button>
+    </div>
+
+    <h3>📋 All Captions</h3>
+    <div id="captionList"></div>
+
+  </div>
 </div>
 
-<script type="module" src="js/admin.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+<script src="js/firebase.js"></script>
+<script src="js/admin.js"></script>
+
 </body>
 </html>
