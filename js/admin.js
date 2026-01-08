@@ -8,6 +8,58 @@ import {
 import {
   ref,
   push,
+  onValue,
+  remove,
+  update
+} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+
+// DOM
+const loginBox = document.getElementById("login");
+const panelBox = document.getElementById("panel");
+
+window.login = () => {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  if (!email || !password) {
+    alert("❗ Email & Password required");
+    return;
+  }
+
+  signInWithEmailAndPassword(auth, email, password)
+    .then(() => {
+      alert("✅ Login Successful");
+    })
+    .catch(err => {
+      alert("❌ Login Failed\n" + err.message);
+    });
+};
+
+onAuthStateChanged(auth, user => {
+  if (user) {
+    loginBox.style.display = "none";
+    panelBox.style.display = "block";
+    loadCaptions();
+  } else {
+    loginBox.style.display = "block";
+    panelBox.style.display = "none";
+  }
+});
+
+window.logout = () => {
+  signOut(auth).then(() => location.reload());
+};
+
+import { auth, db } from "./firebase.js";
+import {
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+
+import {
+  ref,
+  push,
   set,
   onValue
 } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
