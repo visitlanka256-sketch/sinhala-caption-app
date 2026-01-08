@@ -11,9 +11,12 @@ let currentCategory = "all";
 const captionsRef = ref(db, "captions");
 
 onValue(captionsRef, snap => {
-  captions = [];
-  snap.forEach(c => {
-    captions.push({ id: c.key, ...c.val() });
+  const list = [];
+  snap.forEach(c => list.push({ id: c.key, ...c.val() }));
+  saveCache(list);
+  renderCaptions(list);
+});
+
   });
   skeleton.style.display = "none";
   render(captions);
@@ -30,6 +33,15 @@ function render(data) {
           <button onclick="like('${c.id}', ${c.likes||0})">❤️ ${c.likes||0}</button>
         </div>
       </div>`;
+    function saveCache(data) {
+  localStorage.setItem("captions_cache", JSON.stringify(data));
+}
+
+function loadCache() {
+  const cached = localStorage.getItem("captions_cache");
+  if (cached) renderCaptions(JSON.parse(cached));
+}
+
   });
 }
 
@@ -37,6 +49,8 @@ window.copyText = txt => {
   navigator.clipboard.writeText(txt);
   toast.classList.add("show");
   setTimeout(()=>toast.classList.remove("show"),1500);
+  window.addEventListener("offline", loadCache);
+
 };
 
 window.like = (id, likes) => {
