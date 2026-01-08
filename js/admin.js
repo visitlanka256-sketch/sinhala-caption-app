@@ -1,160 +1,66 @@
-import { auth, db } from "./firebase.js";
-import {
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+const auth = firebase.auth();
+const db = firebase.database();
 
-import {
-  ref,
-  push,
-  onValue,
-  remove,
-  update
-} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+function login(){
+  const email = emailInput().value;
+  const pass = passwordInput().value;
 
-// DOM
-const loginBox = document.getElementById("login");
-const panelBox = document.getElementById("panel");
-
-window.login = () => {
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
-
-  if (!email || !password) {
-    alert("❗ Email & Password required");
-    return;
-  }
-
-  signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      alert("✅ Login Successful");
+  auth.signInWithEmailAndPassword(email,pass)
+    .then(()=>{
+      document.getElementById("loginBox").style.display="none";
+      document.getElementById("adminPanel").style.display="block";
+      loadCaptions();
     })
-    .catch(err => {
-      alert("❌ Login Failed\n" + err.message);
-    });
-};
+    .catch(e=>alert(e.message));
+}
 
-onAuthStateChanged(auth, user => {
-  if (user) {
-    loginBox.style.display = "none";
-    panelBox.style.display = "block";
-    loadCaptions();
-  } else {
-    loginBox.style.display = "block";
-    panelBox.style.display = "none";
-  }
-});
+function addCaption(){
+  const text = captionText().value.trim();
+  if(!text) return alert("Caption empty!");
 
-window.logout = () => {
-  signOut(auth).then(() => location.reload());
-};
-
-import { auth, db } from "./firebase.js";
-import {
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-
-import {
-  ref,
-  push,
-  set,
-  onValue
-} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
-
-const loginForm = document.getElementById("loginForm");
-const emailInput = document.getElementById("email");
-const passInput = document.getElementById("password");
-const adminPanel = document.getElementById("adminPanel");
-const logoutBtn = document.getElementById("logoutBtn");
-
-loginForm.addEventListener("submit", e => {
-  e.preventDefault();
-
-  signInWithEmailAndPassword(
-    auth,
-    emailInput.value,
-    passInput.value
-  )
-    .then(() => {
-      loginForm.style.display = "none";
-      adminPanel.style.display = "block";
-    })
-    .catch(err => alert(err.message));
-});
-
-onAuthStateChanged(auth, user => {
-  if (user) {
-    loginForm.style.display = "none";
-    adminPanel.style.display = "block";
-  }
-});
-
-logoutBtn.onclick = () => signOut(auth);
-
-// ADD CAPTION
-document.getElementById("addBtn").onclick = () => {
-  const text = document.getElementById("captionText").value;
-  const cat = document.getElementById("category").value;
-
-  if (!text) return alert("Caption empty");
-
-  const id = push(ref(db, "captions")).key;
-  set(ref(db, "captions/" + id), {
+  const data = {
     text,
-    category: cat
-  });
-
-  document.getElementById("captionText").value = "";
-};
-const captionsRef = ref(db, "captions");
-
-window.addCaption = () => {
-  const text = captionText.value.trim();
-  const category = captionCategory.value;
-
-  if (!text) return alert("❗ Caption empty");
-
-  push(captionsRef, {
-    text,
-    category,
+    category: category().value,
+    premium: premiumOnly().checked,
+    daily: dailyCaption().checked,
     time: Date.now()
-  });
+  };
 
-  captionText.value = "";
-};
-function loadCaptions() {
-  onValue(captionsRef, snap => {
-    captionList.innerHTML = "";
+  db.ref("captions").push(data);
+  captionText().value="";
+  premiumOnly().checked=false;
+  dailyCaption().checked=false;
+}
 
-    snap.forEach(child => {
-      const id = child.key;
-      const data = child.val();
-
-      captionList.innerHTML += `
-        <div class="cap-card">
-          <p contenteditable="true" 
-             onblur="editCaption('${id}', this.innerText)">
-            ${data.text}
-          </p>
-          <small>${data.category}</small>
-          <button onclick="deleteCaption('${id}')">🗑 Delete</button>
-        </div>
-      `;
+function loadCaptions(){
+  db.ref("captions").on("value", snap=>{
+    captionList().innerHTML="";
+    snap.forEach(c=>{
+      const d=c.val();
+      const div=document.createElement("div");
+      div.className="card";
+      div.innerHTML=`
+        <b>${d.text}</b><br>
+        <small>${d.category} ${d.premium?"⭐":""}</small>
+        <div class="row">
+          <button class="small-btn" onclick="deleteCaption('${c.key}')">Delete</button>
+        </div>`;
+      captionList().appendChild(div);
     });
   });
 }
 
-window.deleteCaption = id => {
-  if (confirm("Delete this caption?")) {
-    remove(ref(db, "captions/" + id));
+function deleteCaption(id){
+  if(confirm("Delete this caption?")){
+    db.ref("captions/"+id).remove();
   }
-};
+}
 
-window.editCaption = (id, newText) => {
-  update(ref(db, "captions/" + id), {
-    text: newText
-  });
-};
+/* helpers */
+const emailInput=()=>document.getElementById("email");
+const passwordInput=()=>document.getElementById("password");
+const captionText=()=>document.getElementById("captionText");
+const category=()=>document.getElementById("category");
+const premiumOnly=()=>document.getElementById("premiumOnly");
+const dailyCaption=()=>document.getElementById("dailyCaption");
+const captionList=()=>document.getElementById("captionList");
