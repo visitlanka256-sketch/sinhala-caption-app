@@ -31,3 +31,17 @@ function render(data) {
     list.appendChild(div);
   });
 }
+import { db } from "./firebase.js";
+import { ref, update, get } from
+"https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+
+window.toggleFavorite = async id => {
+  const favRef = ref(db, "favorites/" + id);
+
+  const snap = await get(favRef);
+  const count = snap.exists() ? snap.val().count + 1 : 1;
+
+  update(favRef, { count });
+  alert("❤️ Added to favorites");
+};
+<button onclick="toggleFavorite('CAPTION_ID')">❤️</button>
