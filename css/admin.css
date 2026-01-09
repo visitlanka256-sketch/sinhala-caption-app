@@ -1,12 +1,199 @@
-body {
-  font-family: sans-serif;
-  background: #111;
-  color: #fff;
-  padding: 20px;
+/* 🔥 RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", system-ui, sans-serif;
 }
 
-input, textarea, select, button {
+/* 🌙 COLORS */
+:root {
+  --primary: #6c63ff;
+  --danger: #ff4d4d;
+  --bg: #f4f6fb;
+  --card: #ffffff;
+  --text: #222;
+  --muted: #777;
+  --radius: 14px;
+}
+
+/* BODY */
+body {
+  background: var(--bg);
+  color: var(--text);
+  padding: 16px;
+}
+
+/* 🔐 LOGIN */
+.login-box {
+  max-width: 360px;
+  margin: 80px auto;
+  background: var(--card);
+  padding: 24px;
+  border-radius: var(--radius);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.login-box h2 {
+  margin-bottom: 16px;
+}
+
+.login-box input {
   width: 100%;
-  margin: 6px 0;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 15px;
+}
+
+.login-box button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* 🛠 HEADER */
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--card);
+  padding: 16px;
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.logout-btn {
+  background: var(--danger);
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* 📊 STATS */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(120px,1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.stat-card {
+  background: var(--card);
+  padding: 16px;
+  border-radius: var(--radius);
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+}
+
+.stat-card h3 {
+  font-size: 26px;
+  color: var(--primary);
+}
+
+/* ➕ ADD CAPTION */
+.add-caption {
+  background: var(--card);
+  padding: 16px;
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+}
+
+.add-caption h2 {
+  margin-bottom: 10px;
+}
+
+.add-caption textarea {
+  width: 100%;
+  min-height: 90px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  resize: none;
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+
+.add-caption select {
+  width: 100%;
   padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+
+.add-btn {
+  width: 100%;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+/* 📃 CAPTION LIST */
+.caption-section {
+  background: var(--card);
+  padding: 16px;
+  border-radius: var(--radius);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+}
+
+.caption-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.caption-item {
+  background: #fafafa;
+  padding: 14px;
+  border-radius: 12px;
+  border-left: 5px solid var(--primary);
+}
+
+.caption-item b {
+  font-size: 15px;
+}
+
+.caption-item small {
+  color: var(--muted);
+}
+
+/* 🔘 BUTTONS */
+.row {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+}
+
+.small-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.danger {
+  background: var(--danger);
+  color: #fff;
+}
+
+/* 📱 MOBILE */
+@media(max-width:600px){
+  body { padding: 10px; }
 }
