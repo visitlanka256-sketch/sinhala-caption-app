@@ -132,15 +132,33 @@ button:hover{opacity:.9}
 
 <div class="container">
 
-  <!-- LOGIN -->
   <div id="loginBox" class="card">
-    <h3>🔐 Admin Login</h3>
-    <input id="email" placeholder="Email">
-    <input id="password" type="password" placeholder="Password">
-    <button onclick="login()">Login</button>
-  </div>
+  <h3>🔐 Admin Login</h3>
+  <input id="email" placeholder="Admin Email">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="login()">
+    <span class="material-icons">login</span>
+    Login
+  </button>
+</div>
+
 
   <!-- ADMIN PANEL -->
+  <div class="stats">
+  <div class="stat">
+    <b id="totalCount">0</b>
+    Total Captions
+  </div>
+  <div class="stat">
+    <b id="premiumCount">0</b>
+    Premium
+  </div>
+  <div class="stat">
+    <b id="dailyCount">0</b>
+    Daily
+  </div>
+</div>
+
   <div id="adminPanel" style="display:none">
 
     <div class="card">
