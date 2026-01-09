@@ -56,6 +56,13 @@
   <!-- ➕ ADD CAPTION -->
   <section class="add-caption">
     <h2>➕ Add Caption</h2>
+    
+<!-- Image Upload -->
+<input type="file" id="captionImage" accept="image/*">
+
+<!-- Preview -->
+<img id="previewImg"
+     style="width:100%;margin-top:10px;border-radius:12px;display:none;">
 
     <textarea
       id="captionText"
@@ -80,6 +87,17 @@
   </section>
 
 </div>
+  
+<script>
+document.getElementById("captionImage").onchange = e => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const img = document.getElementById("previewImg");
+  img.src = URL.createObjectURL(file);
+  img.style.display = "block";
+};
+</script>
 
 </body>
 </html>
