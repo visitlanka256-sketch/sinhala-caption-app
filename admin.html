@@ -1,201 +1,85 @@
 <!DOCTYPE html>
 <html lang="si">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Panel – Sinhala Caption App</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <!-- Material Icons -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <title>Admin Panel | Sinhala Caption App</title>
 
-  <style>
-*{
-  box-sizing:border-box;
-}
-body{
-  margin:0;
-  font-family:'Poppins',sans-serif;
-  background:#eef1f7;
-}
+  <!-- Admin CSS -->
+  <link rel="stylesheet" href="css/admin.css">
 
-header{
-  background:linear-gradient(135deg,#6C63FF,#8E85FF);
-  color:#fff;
-  padding:18px;
-  text-align:center;
-  font-size:22px;
-  font-weight:600;
-}
+  <!-- Icons -->
+  <link rel="icon" href="icons/icon-192x192.png">
 
-.container{
-  padding:16px;
-  max-width:900px;
-  margin:auto;
-}
-
-.card{
-  background:#fff;
-  padding:16px;
-  border-radius:16px;
-  box-shadow:0 8px 25px rgba(0,0,0,.08);
-  margin-bottom:16px;
-  animation:fadeIn .4s ease;
-}
-
-@keyframes fadeIn{
-  from{opacity:0;transform:translateY(10px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-input,textarea,select{
-  width:100%;
-  padding:14px;
-  border-radius:12px;
-  border:1px solid #ddd;
-  margin-bottom:12px;
-  font-size:15px;
-}
-
-textarea{ min-height:100px; }
-
-button{
-  width:100%;
-  background:#6C63FF;
-  color:#fff;
-  border:none;
-  padding:14px;
-  border-radius:14px;
-  font-size:16px;
-  font-weight:600;
-  cursor:pointer;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:6px;
-}
-
-button:hover{opacity:.9}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-}
-
-.stat{
-  background:#f6f7ff;
-  padding:14px;
-  border-radius:14px;
-  text-align:center;
-}
-
-.stat b{
-  font-size:22px;
-  display:block;
-}
-
-.caption-item{
-  border-left:4px solid #6C63FF;
-}
-
-.row{
-  display:flex;
-  gap:8px;
-  margin-top:10px;
-}
-
-.small-btn{
-  flex:1;
-  padding:8px;
-  border-radius:10px;
-  background:#f0f0f0;
-  font-size:14px;
-  border:none;
-}
-
-.danger{
-  background:#ff4d4d;
-  color:white;
-}
-
-@media(max-width:600px){
-  .stats{grid-template-columns:1fr;}
-}
-</style>
-
+  <!-- Firebase Admin JS -->
+  <script type="module" src="js/admin.js"></script>
 </head>
 
 <body>
 
-<header>🛠 Admin Dashboard</header>
-
-<div class="container">
-
-  <div id="loginBox" class="card">
-  <h3>🔐 Admin Login</h3>
-  <input id="email" placeholder="Admin Email">
+<!-- 🔐 LOGIN BOX -->
+<div id="loginBox" class="login-box">
+  <h2>🔐 Admin Login</h2>
+  <input id="email" type="email" placeholder="Admin Email">
   <input id="password" type="password" placeholder="Password">
-  <button onclick="login()">
-    <span class="material-icons">login</span>
-    Login
-  </button>
+  <button onclick="login()">Login</button>
 </div>
 
+<!-- 🛠 ADMIN PANEL -->
+<div id="adminPanel" style="display:none;">
 
-  <!-- ADMIN PANEL -->
-  <div class="stats">
-  <div class="stat">
-    <b id="totalCount">0</b>
-    Total Captions
-  </div>
-  <div class="stat">
-    <b id="premiumCount">0</b>
-    Premium
-  </div>
-  <div class="stat">
-    <b id="dailyCount">0</b>
-    Daily
-  </div>
-</div>
+  <!-- HEADER -->
+  <header class="admin-header">
+    <h1>Sinhala Caption Admin</h1>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </header>
 
-  <div id="adminPanel" style="display:none">
-
-    <div class="card">
-      <h3>➕ Add Caption</h3>
-
-      <textarea id="captionText" placeholder="සිංහල caption එක මෙතන..."></textarea>
-
-      <select id="category">
-        <option value="love">Love</option>
-        <option value="sad">Sad</option>
-        <option value="motivation">Motivation</option>
-        <option value="funny">Funny</option>
-      </select>
-
-      <label>
-        <input type="checkbox" id="premiumOnly"> Premium Only
-      </label><br><br>
-
-      <label>
-        <input type="checkbox" id="dailyCaption"> Daily Notification Caption
-      </label><br><br>
-
-      <button onclick="addCaption()">Save Caption</button>
+  <!-- 📊 STATS -->
+  <section class="stats">
+    <div class="stat-card">
+      <h3 id="totalCount">0</h3>
+      <p>Total Captions</p>
     </div>
 
-    <h3>📋 All Captions</h3>
-    <div id="captionList"></div>
+    <div class="stat-card">
+      <h3 id="premiumCount">0</h3>
+      <p>Premium</p>
+    </div>
 
-  </div>
+    <div class="stat-card">
+      <h3 id="dailyCount">0</h3>
+      <p>Daily</p>
+    </div>
+  </section>
+
+  <!-- ➕ ADD CAPTION -->
+  <section class="add-caption">
+    <h2>➕ Add Caption</h2>
+
+    <textarea
+      id="captionText"
+      placeholder="සිංහල Caption එක මෙතන ටයිප් කරන්න..."
+    ></textarea>
+
+    <select id="captionCategory">
+      <option value="love">❤️ Love</option>
+      <option value="sad">😢 Sad</option>
+      <option value="funny">😂 Funny</option>
+      <option value="motivation">🔥 Motivation</option>
+      <option value="attitude">😎 Attitude</option>
+    </select>
+
+    <button class="add-btn" onclick="addCaption()">Add Caption</button>
+  </section>
+
+  <!-- 📃 CAPTION LIST -->
+  <section class="caption-section">
+    <h2>📃 Captions</h2>
+    <div id="captionList" class="caption-list"></div>
+  </section>
+
 </div>
-
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-
-<script src="js/firebase.js"></script>
-<script src="js/admin.js"></script>
 
 </body>
 </html>
