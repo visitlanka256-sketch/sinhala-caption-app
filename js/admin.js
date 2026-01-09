@@ -1,50 +1,68 @@
-// 🔥 Firebase imports (v9 compat)
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+/* ==============================
+   Firebase Imports
+================================ */
+import { app, auth, db, storage } from "./firebase.js";
+
 import {
-  getAuth,
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut
 } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+
 import {
-  getDatabase,
   ref,
   push,
   onValue,
   remove
 } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
-/* 🔥 FIREBASE CONFIG */
-const firebaseConfig = {
-  apiKey: "AIzaSyD_CBwtnOiU4zta9hQOAV_Pybxju0cYlEg",
-  authDomain: "sinhala-caption-app-e8ae2.firebaseapp.com",
-  databaseURL: "https://sinhala-caption-app-e8ae2-default-rtdb.firebaseio.com",
-  projectId: "sinhala-caption-app-e8ae2",
-  storageBucket: "sinhala-caption-app-e8ae2.firebasestorage.app",
-  messagingSenderId: "1078942154546",
-  appId: "1:1078942154546:web:050f46b43d777b8cdb212b"
-};
+import {
+  ref as stRef,
+  uploadBytes,
+  getDownloadURL
+} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js";
 
-// Init
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getDatabase(app);
+/* ==============================
+   DOM Shortcuts
+================================ */
+const loginBox = document.getElementById("loginBox");
+const adminPanel = document.getElementById("adminPanel");
 
-// Helpers
-const captionList = () => document.getElementById("captionList");
+const emailInput = document.getElementById("email");
+const passInput = document.getElementById("password");
 
-/* ---------- AUTH ---------- */
+const captionText = document.getElementById("captionText");
+const captionCategory = document.getElementById("captionCategory");
+const captionImage = document.getElementById("captionImage");
+const previewImg = document.getElementById("previewImg");
+
+const captionList = document.getElementById("captionList");
+
+const totalCount = document.getElementById("totalCount");
+const premiumCount = document.getElementById("premiumCount");
+const dailyCount = document.getElementById("dailyCount");
+
+/* ==============================
+   AUTH
+================================ */
 window.login = () => {
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
+  const email = emailInput.value.trim();
+  const password = passInput.value.trim();
+
+  if (!email || !password) {
+    alert("Email & Password required");
+    return;
+  }
 
   signInWithEmailAndPassword(auth, email, password)
     .then(() => {
-      document.getElementById("loginBox").style.display = "none";
-      document.getElementById("adminPanel").style.display = "block";
-      loadCaptions();
+      loginBox.style.display = "none";
+      adminPanel.style.display = "block";
     })
-    .catch(err => alert("❌ Login failed\n" + err.message));
+    .catch(err => {
+      alert("Login failed ❌");
+      console.error(err);
+    });
 };
 
 window.logout = () => {
@@ -53,37 +71,74 @@ window.logout = () => {
 
 onAuthStateChanged(auth, user => {
   if (user) {
-    document.getElementById("loginBox").style.display = "none";
-    document.getElementById("adminPanel").style.display = "block";
+    loginBox.style.display = "none";
+    adminPanel.style.display = "block";
     loadCaptions();
+  } else {
+    loginBox.style.display = "block";
+    adminPanel.style.display = "none";
   }
 });
 
-/* ---------- ADD CAPTION ---------- */
-window.addCaption = () => {
+/* ==============================
+   ADD CAPTION (TEXT + IMAGE)
+================================ */
+window.addCaption = async () => {
   const text = captionText.value.trim();
   const category = captionCategory.value;
+  const imgFile = captionImage.files[0];
 
-  if (!text) return alert("Caption empty ❌");
+  if (!text) {
+    alert("Caption text required");
+    return;
+  }
 
-  push(ref(db, "captions"), {
-    text,
-    category,
-    premium: false,
-    daily: false,
-    likes: 0,
-    time: Date.now()
-  });
+  let imageUrl = "";
 
-  captionText.value = "";
+  try {
+    if (imgFile) {
+      const imgRef = stRef(
+        storage,
+        "captions/" + Date.now() + "_" + imgFile.name
+      );
+
+      await uploadBytes(imgRef, imgFile);
+      imageUrl = await getDownloadURL(imgRef);
+    }
+
+    await push(ref(db, "captions"), {
+      text: text,
+      category: category,
+      image: imageUrl,
+      premium: false,
+      daily: false,
+      likes: 0,
+      time: Date.now()
+    });
+
+    captionText.value = "";
+    captionCategory.value = "love";
+    captionImage.value = "";
+    previewImg.style.display = "none";
+
+  } catch (e) {
+    console.error(e);
+    alert("Error adding caption");
+  }
 };
 
-/* ---------- LOAD CAPTIONS + STATS ---------- */
-function loadCaptions() {
-  onValue(ref(db, "captions"), snap => {
-    captionList().innerHTML = "";
+/* ==============================
+   LOAD + STATS
+================================ */
+window.loadCaptions = () => {
+  const captionsRef = ref(db, "captions");
 
-    let total = 0, premium = 0, daily = 0;
+  onValue(captionsRef, snap => {
+    captionList.innerHTML = "";
+
+    let total = 0;
+    let premium = 0;
+    let daily = 0;
 
     snap.forEach(c => {
       total++;
@@ -94,27 +149,49 @@ function loadCaptions() {
 
       const div = document.createElement("div");
       div.className = "card caption-item";
+
       div.innerHTML = `
+        ${d.image ? `<img src="${d.image}" class="cap-img">` : ""}
         <b>${d.text}</b><br>
-        <small>${d.category} ${d.premium ? "⭐ Premium" : ""}</small>
+        <small>${d.category}
+          ${d.premium ? "⭐ Premium" : ""}
+          ${d.daily ? "📅 Daily" : ""}
+        </small>
+
         <div class="row">
-          <button class="small-btn danger" onclick="deleteCaption('${c.key}')">
+          <button class="small-btn danger"
+            onclick="deleteCaption('${c.key}')">
             Delete
           </button>
         </div>
       `;
-      captionList().appendChild(div);
+
+      captionList.appendChild(div);
     });
 
-    document.getElementById("totalCount").innerText = total;
-    document.getElementById("premiumCount").innerText = premium;
-    document.getElementById("dailyCount").innerText = daily;
+    totalCount.innerText = total;
+    premiumCount.innerText = premium;
+    dailyCount.innerText = daily;
   });
-}
-
-/* ---------- DELETE ---------- */
-window.deleteCaption = id => {
-  if (confirm("Delete this caption?")) {
-    remove(ref(db, "captions/" + id));
-  }
 };
+
+/* ==============================
+   DELETE
+================================ */
+window.deleteCaption = id => {
+  if (!confirm("Delete this caption?")) return;
+  remove(ref(db, "captions/" + id));
+};
+
+/* ==============================
+   IMAGE PREVIEW
+================================ */
+if (captionImage) {
+  captionImage.onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    previewImg.src = URL.createObjectURL(file);
+    previewImg.style.display = "block";
+  };
+}
