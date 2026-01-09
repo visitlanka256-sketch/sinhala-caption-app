@@ -3,12 +3,13 @@ import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/
 import { getDatabase } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js";
 
-const firebaseConfig = {
+
+  const firebaseConfig = {
   apiKey: "AIzaSyD_CBwtnOiU4zta9hQOAV_Pybxju0cYlEg",
   authDomain: "sinhala-caption-app-e8ae2.firebaseapp.com",
   databaseURL: "https://sinhala-caption-app-e8ae2-default-rtdb.firebaseio.com",
   projectId: "sinhala-caption-app-e8ae2",
-  storageBucket: "sinhala-caption-app-e8ae2.appspot.com",
+  storageBucket: "sinhala-caption-app-e8ae2.firebasestorage.app",
   messagingSenderId: "1078942154546",
   appId: "1:1078942154546:web:050f46b43d777b8cdb212b"
 };
