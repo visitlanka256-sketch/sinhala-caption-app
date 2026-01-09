@@ -197,3 +197,8 @@ body {
 @media(max-width:600px){
   body { padding: 10px; }
 }
+.cap-img {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 8px;
+}
